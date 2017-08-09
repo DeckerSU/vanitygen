@@ -295,7 +295,7 @@ usage(const char *name)
 {
 	fprintf(stderr,
 "Vanitygen %s (" OPENSSL_VERSION_TEXT ")\n"
-"Usage: %s [-vqnrik1NT] [-t <threads>] [-f <filename>|-] [<pattern>...]\n"
+"Usage: %s [-vqnrik1NBT] [-t <threads>] [-f <filename>|-] [<pattern>...]\n"
 "Generates a bitcoin receiving address matching <pattern>, and outputs the\n"
 "address and associated private key.  The private key may be stored in a safe\n"
 "location or imported into a bitcoin client to spend any balance received on\n"
@@ -312,6 +312,7 @@ usage(const char *name)
 "-k            Keep pattern and continue search after finding a match\n"
 "-1            Stop after first match\n"
 "-N            Generate namecoin address\n"
+"-B            Generate signatum address\n"
 "-T            Generate bitcoin testnet address\n"
 "-X <version>  Generate address with the given version\n"
 "-F <format>   Generate address with the given format (pubkey or script)\n"
@@ -361,7 +362,7 @@ main(int argc, char **argv)
 
 	int i;
 
-	while ((opt = getopt(argc, argv, "vqnrik1eE:P:NTX:F:t:h?f:o:s:")) != -1) {
+	while ((opt = getopt(argc, argv, "vqnrik1eE:P:NBTX:F:t:h?f:o:s:")) != -1) {
 		switch (opt) {
 		case 'v':
 			verbose = 2;
@@ -388,6 +389,10 @@ main(int argc, char **argv)
 			addrtype = 52;
 			privtype = 180;
 			scriptaddrtype = -1;
+			break;
+		case 'B':
+			addrtype = 25; // from chainparams.cpp
+			privtype = 63+128;
 			break;
 		case 'T':
 			addrtype = 111;
